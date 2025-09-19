@@ -46,12 +46,15 @@ Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ---
+```
 
 ## How to Run
 
 ```powershell
 python main.py
----
+```
+## Git Workflow Used
+
 git add -A
 git commit -m "Add scaffold: .gitignore, requirements.txt, main.py"
 git push
@@ -69,12 +72,16 @@ git commit -m "Update README with setup commands, workflow, and sample output"
 git push
 
 ## Sample Output
+
               title                 author_name
 0  Pride and Prejudice             Jane Austen
 1                Emma             Jane Austen
 2  Adventures of Huckleberry Finn   Mark Twain
 3     Things Fall Apart             Chinua Achebe
 4     Kafka on the Shore            Haruki Murakami
+
+## Database Schema
+
 CREATE TABLE authors (
     author_id      INTEGER PRIMARY KEY,
     author_name    TEXT NOT NULL,
