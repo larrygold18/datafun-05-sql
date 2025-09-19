@@ -1,47 +1,47 @@
-import sqlite3
-import pandas as pd
+import csv, sqlite3
 from pathlib import Path
 
-# File paths
-DATA_DIR = Path(__file__).parent
-AUTHORS_CSV = DATA_DIR / "authors.csv"
-BOOKS_CSV = DATA_DIR / "books.csv"
-DB_PATH = DATA_DIR / "example.sqlite"
+DB = Path("example.sqlite")
+DATA = Path("data")
+
+def run_sql(conn, path):
+    with open(path, "r", encoding="utf-8") as f:
+        conn.executescript(f.read())
 
 def main():
-    conn = sqlite3.connect(DB_PATH)
-    conn.execute("PRAGMA foreign_keys = ON;")
+    # start fresh each run
+    DB.unlink(missing_ok=True)
+    with sqlite3.connect(DB) as conn:
+        conn.execute("PRAGMA foreign_keys = ON;")
 
-    # Create tables
-    conn.executescript("""
-    CREATE TABLE IF NOT EXISTS authors (
-        author_id INTEGER PRIMARY KEY,
-        author_name TEXT NOT NULL,
-        country TEXT
-    );
-    CREATE TABLE IF NOT EXISTS books (
-        book_id INTEGER PRIMARY KEY,
-        title TEXT NOT NULL,
-        author_id INTEGER NOT NULL,
-        year_published INTEGER,
-        genre TEXT,
-        FOREIGN KEY (author_id) REFERENCES authors(author_id)
-    );
-    """)
+        # create tables
+        run_sql(conn, "sql_create/01_create_tables.sql")
 
-    # Load CSVs into tables
-    pd.read_csv(AUTHORS_CSV).to_sql("authors", conn, if_exists="replace", index=False)
-    pd.read_csv(BOOKS_CSV).to_sql("books", conn, if_exists="replace", index=False)
+        # load authors from CSV
+        with (DATA / "authors.csv").open(newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            rows = [(r["author_id"], r["first"], r["last"]) for r in reader]
+        conn.executemany("INSERT INTO authors(author_id, first, last) VALUES (?,?,?)", rows)
 
-    # Simple query
-    result = pd.read_sql_query("""
-        SELECT b.title, a.author_name
-        FROM books b
-        JOIN authors a ON b.author_id = a.author_id;
-    """, conn)
-    print(result)
+        # load books from CSV
+        with (DATA / "books.csv").open(newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            rows = [(r["book_id"], r["title"], int(r["year_published"]), r["author_id"]) for r in reader]
+        conn.executemany("INSERT INTO books(book_id, title, year_published, author_id) VALUES (?,?,?,?)", rows)
 
-    conn.close()
+        # alter table: add is_favorite if not already there
+        cur = conn.execute("PRAGMA table_info(books)")
+        cols = [row[1] for row in cur.fetchall()]
+        if "is_favorite" not in cols:
+            conn.executescript(Path("sql_alter/01_add_is_favorite.sql").read_text(encoding="utf-8"))
+
+        # quick check
+        for row in conn.execute("""
+            SELECT b.title, b.year_published, a.first || ' ' || a.last AS author, b.is_favorite
+            FROM books b JOIN authors a ON a.author_id=b.author_id
+            ORDER BY b.year_published
+        """):
+            print(row)
 
 if __name__ == "__main__":
     main()
