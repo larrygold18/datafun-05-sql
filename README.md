@@ -25,8 +25,6 @@ Meets the course requirements: scripts (not notebooks), virtual environment, dep
 - `example.sqlite` — generated SQLite database (ignored by Git)  
 - `README.md` — documentation of project setup, workflow, and results  
 
----
-
 ## Setup Instructions (Windows / PowerShell)
 
 ```powershell
@@ -54,7 +52,7 @@ pip install -r requirements.txt
 python main.py
 ```
 ## Git Workflow Used
-
+```powershell
 git add -A
 git commit -m "Add scaffold: .gitignore, requirements.txt, main.py"
 git push
@@ -70,18 +68,19 @@ git push
 git add README.md
 git commit -m "Update README with setup commands, workflow, and sample output"
 git push
+```
 
 ## Sample Output
-
+```
               title                 author_name
 0  Pride and Prejudice             Jane Austen
 1                Emma             Jane Austen
 2  Adventures of Huckleberry Finn   Mark Twain
 3     Things Fall Apart             Chinua Achebe
 4     Kafka on the Shore            Haruki Murakami
-
+```
 ## Database Schema
-
+```sql
 CREATE TABLE authors (
     author_id      INTEGER PRIMARY KEY,
     author_name    TEXT NOT NULL,
@@ -96,3 +95,4 @@ CREATE TABLE books (
     genre          TEXT,
     FOREIGN KEY (author_id) REFERENCES authors(author_id)
 );
+```
