@@ -81,18 +81,20 @@ git push
 ```
 ## Database Schema
 ```sql
-CREATE TABLE authors (
-    author_id      INTEGER PRIMARY KEY,
-    author_name    TEXT NOT NULL,
-    country        TEXT
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE IF NOT EXISTS authors (
+    author_id TEXT PRIMARY KEY,      -- GUID as TEXT
+    first     TEXT NOT NULL,
+    last      TEXT NOT NULL
 );
 
-CREATE TABLE books (
-    book_id        INTEGER PRIMARY KEY,
-    title          TEXT NOT NULL,
-    author_id      INTEGER NOT NULL,
-    year_published INTEGER,
-    genre          TEXT,
+CREATE TABLE IF NOT EXISTS books (
+    book_id         TEXT PRIMARY KEY,    -- GUID as TEXT
+    title           TEXT NOT NULL,
+    year_published  INTEGER,
+    author_id       TEXT NOT NULL,
     FOREIGN KEY (author_id) REFERENCES authors(author_id)
 );
+
 ```
