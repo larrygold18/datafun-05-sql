@@ -1,7 +1,7 @@
 import csv, sqlite3
 from pathlib import Path
 
-DB = Path("example.sqlite")
+DB = Path("project.sqlite3")        # <-- use the assignment's name
 DATA = Path("data")
 
 def run_sql(conn, path):
@@ -9,25 +9,36 @@ def run_sql(conn, path):
         conn.executescript(f.read())
 
 def main():
-    # start fresh each run
+    # start fresh each run (ok for this assignment)
     DB.unlink(missing_ok=True)
+
     with sqlite3.connect(DB) as conn:
         conn.execute("PRAGMA foreign_keys = ON;")
 
         # create tables
         run_sql(conn, "sql_create/01_create_tables.sql")
 
-        # load authors from CSV
+        # load authors from CSV (parent first)
         with (DATA / "authors.csv").open(newline="", encoding="utf-8") as f:
             reader = csv.DictReader(f)
             rows = [(r["author_id"], r["first"], r["last"]) for r in reader]
-        conn.executemany("INSERT INTO authors(author_id, first, last) VALUES (?,?,?)", rows)
+        conn.executemany(
+            "INSERT INTO authors(author_id, first, last) VALUES (?,?,?)",
+            rows
+        )
 
         # load books from CSV
         with (DATA / "books.csv").open(newline="", encoding="utf-8") as f:
             reader = csv.DictReader(f)
-            rows = [(r["book_id"], r["title"], int(r["year_published"]), r["author_id"]) for r in reader]
-        conn.executemany("INSERT INTO books(book_id, title, year_published, author_id) VALUES (?,?,?,?)", rows)
+            def to_int(v):  # tolerate blanks
+                try: return int(v)
+                except: return None
+            rows = [(r["book_id"], r["title"], to_int(r["year_published"]), r["author_id"])
+                    for r in reader]
+        conn.executemany(
+            "INSERT INTO books(book_id, title, year_published, author_id) VALUES (?,?,?,?)",
+            rows
+        )
 
         # alter table: add is_favorite if not already there
         cur = conn.execute("PRAGMA table_info(books)")
@@ -38,7 +49,8 @@ def main():
         # quick check
         for row in conn.execute("""
             SELECT b.title, b.year_published, a.first || ' ' || a.last AS author, b.is_favorite
-            FROM books b JOIN authors a ON a.author_id=b.author_id
+            FROM books b
+            JOIN authors a ON a.author_id = b.author_id
             ORDER BY b.year_published
         """):
             print(row)
