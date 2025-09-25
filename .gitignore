@@ -1,21 +1,8 @@
-# Python
-__pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-
-# Environments / DBs
 .venv/
-env/
-venv/
+__pycache__/
 *.sqlite
-*.db
+*.sqlite3
+.ipynb_checkpoints/
+logs/
+data/*.sqlite*
 
-# OS / IDE
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
-
-# Logs
-*.log
