@@ -131,4 +131,4 @@ matplotlib  # the foundation
 seaborn     # built on top of matplotlib
 
 # general-purpose interactivity library
-ipywidgets  
+ipywidgets  pandas

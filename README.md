@@ -11,7 +11,6 @@ Model: **Teams (parent) → Players (child)** with a 1→N relationship.
 git clone https://github.com/larrygold18/datafun-05-sql.git
 cd datafun-05-sql
 ```
-
 # 2) Create & activate venv
 py -m venv .venv
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
