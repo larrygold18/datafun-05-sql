@@ -1,12 +1,8 @@
-# Python
+# Python / venv
+.venv/
 __pycache__/
 *.py[cod]
 *$py.class
-
-# Virtual envs
-.venv/
-venv/
-env/
 
 # SQLite DBs
 *.sqlite
@@ -15,12 +11,9 @@ data/*.sqlite*
 project.sqlite3
 league.sqlite3
 
-# Notebooks & VS Code
+# Jupyter / VS Code
 .ipynb_checkpoints/
 .vscode/
 
 # Logs
 logs/
-
-# Prevent accidentally nested repo from being tracked again
-/datafun-05-sql/
