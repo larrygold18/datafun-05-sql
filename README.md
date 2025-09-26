@@ -127,7 +127,7 @@ Shows the run order (**01_drop_tables.sql → 02_create_tables.sql → 03_insert
 
 **Setup output:**
 
-![Setup output](docs/img/db01_setup.py.png_output.png)
+![Setup output](docs/img/db01_setup.py.png)
 
 ---
 
