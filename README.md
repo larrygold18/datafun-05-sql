@@ -150,3 +150,11 @@ Displays the results of join/group-by/sorting queries and prints CSV save confir
 **Queries output:**
 
 ![Queries output](docs/img/db03_queries.py.png)
+> Tested with **Python 3.11+**
+
+### CSV outputs
+- [Aggregation](docs/out/out_query_aggregation.csv)
+- [Filter](docs/out/out_query_filter.csv)
+- [Group By](docs/out/out_query_group_by.csv)
+- [Join](docs/out/out_query_join.csv)
+- [Sorting](docs/out/out_query_sorting.csv)
