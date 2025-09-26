@@ -28,8 +28,7 @@ py db02_features.py
 # 6) Run queries (aggregation, filter, sort, group-by, join)
 py db03_queries.py
 ```
-
-## Schema Design (Step 4)
+## Schema Design
 ```
 **Entities**
 - **teams**  
@@ -61,7 +60,7 @@ py db03_queries.py
 - `sql_features/delete_records.sql` – deletes one player by last name  
 - `db02_features.py` runs both scripts and prints updated/deleted row counts
 - ```
-## Step 6 — Aggregations & Queries (results)
+## Aggregations & Queries (results)
 
 Below are sample outputs from my SQL queries:
 
@@ -119,3 +118,35 @@ datafun-05-sql/
 ├─ db03_queries.py
 └─ README.md
 ```
+## Screenshots (Verification)
+
+### 1) `db01_setup.py` — Database initialized
+Shows the run order (**01_drop_tables.sql → 02_create_tables.sql → 03_insert_records.sql**) and the success line.
+
+**What to capture:** the three “Running:” lines and the success line (e.g., `✔ Database initialized: data/league.sqlite3` or `Database ready at ...`).
+
+**Setup output:**
+
+![Setup output](docs/img/db01_setup.py.png_output.png)
+
+---
+
+### 2) `db02_features.py` — Updates/Deletes applied
+Confirms feature scripts executed (updates and delete) and reports row counts.
+
+**What to capture:** “-- running update_records.sql”, “-- running delete_records.sql”, and the final counts (e.g., `Updated rows: X`, `Deleted rows: Y`).
+
+**Features output:**
+
+![Features output](docs/img/db02_features.py.png)
+
+---
+
+### 3) `db03_queries.py` — Joins / Aggregations / CSVs
+Displays the results of join/group-by/sorting queries and prints CSV save confirmations (`Saved: out_*.csv`).
+
+**What to capture:** one or two printed tables (e.g., from `query_join.sql` and/or `query_group_by.sql`) **and** the “Saved: out_*.csv” lines.
+
+**Queries output:**
+
+![Queries output](docs/img/db03_queries.py.png)
